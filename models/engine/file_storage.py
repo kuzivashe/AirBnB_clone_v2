@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""This module defines a class to manage file storage for hbnb clone"""
+"""This is the file storage class for AirBnB"""
 import json
 from models.base_model import BaseModel
 from models.user import User
@@ -18,10 +18,10 @@ class FileStorage:
         __file_path: path to the JSON file
         __objects: objects will be stored
     """
-    __file_path = 'file.json'
+    __file_path = "file.json"
     __objects = {}
 
-    def all(self):
+    def all(self, cls=None):
         """returns a dictionary
         Return:
             returns a dictionary of __object
@@ -66,6 +66,8 @@ class FileStorage:
                     self.__objects[key] = value
         except FileNotFoundError:
             pass
+
+    def delete(self, obj=None):
         """ delete an existing element
         """
         if obj:
@@ -73,6 +75,6 @@ class FileStorage:
             del self.__objects[key]
 
     def close(self):
-        """ close method AirBnB flask
+        """ close method Airbnb flask
         """
         self.reload()

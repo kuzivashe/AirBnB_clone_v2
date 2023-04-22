@@ -1,9 +1,12 @@
 #!/usr/bin/python3
-""" create a web application that listen in port 5000
+"""create a web application that listens on port 5000
 """
 
 
 from flask import Flask, escape, render_template
+from models import storage
+import shlex
+
 app = Flask(__name__)
 # condition strict_slashes=False
 app.url_map.strict_slashes = False
@@ -59,6 +62,32 @@ def second_render(n):
     """ even or odd render
     """
     return (render_template('6-number_odd_or_even.html', n=n))
+
+
+@app.route('/states_list')
+def call_States():
+    """ call the states created
+    """
+    lista = []
+    dic = storage.all("State")
+    for elem in dic:
+        var = dic[elem].name + "/" + dic[elem].id
+        lista.append(var)
+    lista.sort()
+    # list of ordered tuples
+    lista2 = []
+    for elem in lista:
+        elem = elem.replace('/', ' ')
+        elem = shlex.split(elem)
+        lista2.append((elem[0], elem[1]))
+    return (render_template('7-states_list.html', tupla=lista2))
+
+
+@app.teardown_appcontext
+def close(var=None):
+    """ realizae this, when the process finishes
+    """
+    storage.close()
 
 
 if __name__ == "__main__":
